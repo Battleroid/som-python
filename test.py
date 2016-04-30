@@ -21,12 +21,22 @@ s = SOM()
 
 pprint(s.__dict__)
 
-good, bad = s.train(data)
+results = s.train(data)
 
-print '*** GOOD, total', len(good)
+while len(results) == 1:
+    print 'Only one node, restarting...'
+    s = SOM()
+    results = s.train(data)
+
+for k, v in results.items():
+    print '#', k, '(', len(v),  '):', v
+
+print 'Good:'
+good = {k: v for k, v in results.items() if len(v) >= s.threshold}
 for k, v in good.items():
-    print k, 'has', len(v), 'records:', ', '.join(v)
+    print k, v
 
-print '*** BAD, total', len(bad)
+print 'Bad:'
+bad = {k: v for k, v in results.items() if len(v) < s.threshold}
 for k, v in bad.items():
-    print k, 'has', len(v), 'records:', ', '.join(v)
+    print k, v

@@ -100,14 +100,12 @@ class SOM(object):
 
         # finished, associate each record with the BMU
         groups = defaultdict(list)
+        for _ in range(len(self.outputs)):
+            groups[_] = []
 
         for v in data:
             vd = v[1:]
             x = self.bmu(vd)
             groups[x].append(v[0])
 
-        # build good & bad groupings
-        good = {k: v for k, v in groups.items() if len(v) >= self.threshold}
-        bad = {k: v for k, v in groups.items() if len(v) < self.threshold}
-
-        return good, bad
+        return groups
